@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import mang.tools.ftp.FTPTool;
 import mang.tools.ftp.download.DownloadAfter;
 import mang.tools.ftp.download.FtpDownloadInfo;
 import mang.util.common.FileUtil;
-import mang.util.ftp.ftp4j.FTPTool;
 
 @Component
 public class RemoveFtpFileAfter implements DownloadAfter {
