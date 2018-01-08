@@ -59,17 +59,6 @@ public class FTPDownloadSkeleton {
 		}
 	}
 	
-	
-
-	public FTPDownloadProcessor getDownloadProcessor() {
-		return downloadProcessor;
-	}
-	public void setDownloadProcessor(FTPDownloadProcessor downloadProcessor) {
-		this.downloadProcessor = downloadProcessor;
-	}
-	public List<DownloadAfter> getDownloadAfterList() {
-		return downloadAfterList;
-	}
 	public void addDownloadAfter(DownloadAfter downloadAfter) {
 		this.downloadAfterList.add(downloadAfter);
 	}
@@ -77,4 +66,29 @@ public class FTPDownloadSkeleton {
 	public void addDownloadFinsh(DownloadFinish downloadFinish){
 		this.downloadFinishList.add(downloadFinish);
 	}
+
+	public FTPDownloadProcessor getDownloadProcessor() {
+		return downloadProcessor;
+	}
+
+	public void setDownloadProcessor(FTPDownloadProcessor downloadProcessor) {
+		this.downloadProcessor = downloadProcessor;
+	}
+
+	public List<DownloadAfter> getDownloadAfterList() {
+		return downloadAfterList;
+	}
+
+	public void setDownloadAfterList(List<DownloadAfter> downloadAfterList) {
+		this.downloadAfterList = downloadAfterList;
+	}
+
+	public List<DownloadFinish> getDownloadFinishList() {
+		return downloadFinishList;
+	}
+
+	public void setDownloadFinishList(List<DownloadFinish> downloadFinishList) {
+		this.downloadFinishList = downloadFinishList;
+	}
+	
 }

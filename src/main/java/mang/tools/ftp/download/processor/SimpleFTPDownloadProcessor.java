@@ -167,4 +167,14 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 		return sn;
 	}
 
+	public List<DownloadListener> getDownloadListenerList() {
+		return downloadListenerList;
+	}
+
+	public void setDownloadListenerList(List<DownloadListener> downloadListenerList) {
+		this.downloadListenerList = downloadListenerList;
+	}
+	
+	
+
 }
