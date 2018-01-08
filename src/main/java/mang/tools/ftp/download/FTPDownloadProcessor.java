@@ -10,8 +10,10 @@ public interface FTPDownloadProcessor {
 	 * */
 	public void init();
 	
+	/**
+	 * 登录
+	 * */
 	public void login();
-	
 	
 	
 	/**
@@ -19,13 +21,23 @@ public interface FTPDownloadProcessor {
 	 * */
 	public List<FtpDownloadInfo> download();
 	
-	
+	/**
+	 * 添加下载监听器
+	 * 用于在下载文件时做自己一逻辑
+	 * */
 	public void addDownloadListener(DownloadListener listener);
 	
 	
+	/**
+	 * 获取下载过程中的上下文信息.
+	 * 如下载路径等 方便后续处理
+	 * */
 	public Map<String,Object> getContextMap();
 	
 	
+	/**
+	 * FTP登出
+	 * */
 	public void logout();
 	
 }

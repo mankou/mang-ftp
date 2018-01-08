@@ -8,10 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * FTP下载框架代码
+ * 使用: 用于组织FTP下载框架代码的核心逻辑
+ * */
 @Component
 public class FTPDownloadSkeleton {
 	private static final Logger log = LoggerFactory.getLogger(FTPDownloadSkeleton.class);
 	
+	//TODO 这里不能自动注入了 应该用配置文件注入
 	@Autowired
 	private FTPDownloadProcessor downloadProcessor;
 	
@@ -26,13 +31,24 @@ public class FTPDownloadSkeleton {
 		//XXX 下载这块这样返回好么? 我也不知道 如果返回的Map则比较复杂
 		List<FtpDownloadInfo> downloadInfoList = downloadProcessor.download();
 		Map<String,Object> contextMap=downloadProcessor.getContextMap();
+		
+		this.after(downloadInfoList, contextMap);
+		
+		downloadProcessor.logout();
+		
+		this.finish(downloadInfoList, contextMap);	
+	}
+	
+	
+	public void after(List<FtpDownloadInfo> downloadInfoList,Map<String,Object> contextMap){
 		if(downloadAfterList!=null && downloadAfterList.size()>0){
 			for (DownloadAfter downloadAfter : downloadAfterList) {
 				downloadAfter.after(downloadInfoList,contextMap);
 			}
 		}
-		downloadProcessor.logout();
-		
+	}
+	
+	public void finish(List<FtpDownloadInfo> downloadInfoList,Map<String,Object> contextMap){
 		if(downloadFinishList!=null && downloadFinishList.size()>0){
 			for(DownloadFinish downloadFinsh:downloadFinishList){
 				try{
@@ -42,8 +58,9 @@ public class FTPDownloadSkeleton {
 				}
 			}
 		}
-		
 	}
+	
+	
 
 	public FTPDownloadProcessor getDownloadProcessor() {
 		return downloadProcessor;
