@@ -17,6 +17,8 @@
     
     <!-- 如下指定外置路径 -->
 	<context:property-placeholder location="classpath:setting.properties"/>
+	
+	<!-- 包扫描 -->
 	<context:component-scan base-package="mang.tools.ftp"/>
 	
 	<import resource="applicationContext-bean-mang-ftp.xml"/>
