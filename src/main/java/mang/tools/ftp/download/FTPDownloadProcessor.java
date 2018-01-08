@@ -27,6 +27,11 @@ public interface FTPDownloadProcessor {
 	 * */
 	public void addDownloadListener(DownloadListener listener);
 	
+	/**
+	 * 获取下载监听器
+	 * */
+	public List<DownloadListener> getDownloadListener();
+	
 	
 	/**
 	 * 获取下载过程中的上下文信息.
