@@ -15,7 +15,7 @@
     http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	
-	<bean id="ftpDownloadSkeleton" class="mang.tools.ftp.download.FTPDownloadSkeleton">
+	<bean id="FTPDownloadSkeleton" class="mang.tools.ftp.download.FTPDownloadSkeleton" scope="prototype">
 	      <property name="downloadProcessor" ref="simpleFTPDownloadProcessor"></property>
 	</bean>
 
