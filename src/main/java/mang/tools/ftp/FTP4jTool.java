@@ -49,10 +49,11 @@ public class FTP4jTool implements FTPTool {
 			if (charset != null) {
 				client.setCharset(charset);
 			}
-			String currentDirectory=client.currentDirectory();
-			log.info("current directory:{}",currentDirectory);
 			// 打印地址信息
 			log.info("ftp login successfully {}", client);
+			
+			String currentDirectory=client.currentDirectory();
+			log.info("current directory:{}",currentDirectory);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
