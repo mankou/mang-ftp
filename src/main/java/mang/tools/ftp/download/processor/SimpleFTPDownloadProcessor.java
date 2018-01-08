@@ -88,6 +88,11 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 			for (String fileName : fileList) {
 				String ftpFilePath = remotePath + "/" + fileName;
 				Map<String, Object> listenerPara = new HashMap<String, Object>();
+				listenerPara.putAll(contextMap);
+				listenerPara.put("source", ftpFilePath);
+				listenerPara.put("target", localPath);
+				
+				
 				beforeDownloadListener(listenerPara);
 
 				ftptool.downloadFile(ftpFilePath, localPath);
@@ -129,7 +134,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 	private void beforeDownloadListener(Map<String, Object> listenerPara) {
 		if (downloadListenerList != null && downloadListenerList.size() > 0) {
 			for (DownloadListener downloadListener : downloadListenerList) {
-				downloadListener.afterDownload(listenerPara);
+				downloadListener.beforeDownload(listenerPara);
 			}
 		}
 	}

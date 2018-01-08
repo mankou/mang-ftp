@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class FTPDownloadSkeleton {
 	private static final Logger log = LoggerFactory.getLogger(FTPDownloadSkeleton.class);
 	
-	//TODO 这里不能自动注入了 应该用配置文件注入
+	//这里不能自动注入了 应该用配置文件注入 以后好修改具体的实现类
 //	@Autowired
 	private FTPDownloadProcessor downloadProcessor;
 	
@@ -53,7 +53,7 @@ public class FTPDownloadSkeleton {
 				try{
 					downloadFinsh.finish(downloadInfoList, contextMap);					
 				}catch (Exception e) {
-					log.info("执行finish出错", e);
+					log.info("execute finish error", e);
 				}
 			}
 		}

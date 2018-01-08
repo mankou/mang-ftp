@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import mang.tools.ftp.download.DownloadFinish;
 import mang.tools.ftp.download.FTPDownloadSkeleton;
 import mang.tools.ftp.download.after.RemoveFtpFileAfter;
+import mang.tools.ftp.download.listener.StaDownloadCountListener;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration( { "/applicationContext-mang-ftp.xml" })
@@ -38,9 +39,15 @@ public class FTPDownloadSkeletonTest {
 	@Test
 	public void testDownloadSkeleton(){
 		log.info("hello 开始");
+		
+		StaDownloadCountListener countListener=new StaDownloadCountListener();
+		downloadSkeleton.getDownloadProcessor().addDownloadListener(countListener); //添加一个监听 用于记录下载了多少个文件
 		downloadSkeleton.addDownloadAfter(removeFtpFileAfter);
 		downloadSkeleton.addDownloadFinsh(localBakeFileByProSn);
 		downloadSkeleton.addDownloadFinsh(cleanLocalDownloadXml);
 		downloadSkeleton.run();
+		
+		int count=countListener.getDownloadCount();
+		log.info("download {} files",count);
 	}
 }

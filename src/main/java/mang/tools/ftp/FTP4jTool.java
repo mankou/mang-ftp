@@ -2,11 +2,15 @@ package mang.tools.ftp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import it.sauronsoftware.ftp4j.FTPClient;
 import it.sauronsoftware.ftp4j.FTPFile;
+import mang.tools.ftp.download.DownloadListener;
 
 public class FTP4jTool implements FTPTool {
 	private static final Logger log = LoggerFactory.getLogger(FTP4jTool.class);
@@ -229,7 +233,7 @@ public class FTP4jTool implements FTPTool {
 	}
 	
 	@Override
-	public void downloadRecursive(String remoteDirPath, String fileSpec, String localDirpath,FTPDownListener downListener) {
+	public void downloadRecursive(String remoteDirPath, String fileSpec, String localDirpath,DownloadListener downListener) {
 		FTPFile [] fileArray=(FTPFile[]) this.list(remoteDirPath);
 		for(FTPFile ftpFile:fileArray){
 			String fileName=ftpFile.getName();
@@ -239,9 +243,18 @@ public class FTP4jTool implements FTPTool {
 				downloadRecursive(remoteFileName, fileSpec, localDirpath,downListener);
 			}else if(ftpFile.getType()==FTPFile.TYPE_FILE){
 				if(fileSpec==null||"".equals(fileSpec)||fileName.indexOf(fileSpec)>-1){
-					this.downloadFile(remoteFileName, localDirpath);
+					Map<String,Object> listenerPara =new HashMap<String,Object>();
+					listenerPara.put("remoteFileName", remoteDirPath);
+					listenerPara.put("localDirpath", localDirpath);
+					
 					if(downListener!=null){
-						downListener.afterDownload(remoteFileName,localDirpath);
+						downListener.beforeDownload(listenerPara);
+					}
+					
+					this.downloadFile(remoteFileName, localDirpath);
+					
+					if(downListener!=null){
+						downListener.afterDownload(listenerPara);
 					}
 				}
 			}

@@ -2,6 +2,8 @@ package mang.tools.ftp;
 
 import java.util.List;
 
+import mang.tools.ftp.download.DownloadListener;
+
 public interface FTPTool {
 	
 	/**
@@ -68,7 +70,7 @@ public interface FTPTool {
 	/**
 	 * 递归下载
 	 * */
-	public void downloadRecursive(String remoteDirPath,String fileSpec,String localDirpath,FTPDownListener downListener);
+	public void downloadRecursive(String remoteDirPath,String fileSpec,String localDirpath,DownloadListener downListener);
 	
 	
 	
