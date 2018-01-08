@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<!-- author:mang 
+	create:2014.03.06 
+	modify:2017-08-15
+	说明：该xml文件是由原来的log4j.properties通过log4j转换工具转换过来的，当时注释都没有了，这里的注释是新加的2014.03.06测试可以使用 
+	-->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<!-- #INFO表示输出INFO及其以上级别信息 # 其它可选的选项 OFF,FATAL,ERROR,WRAN,INFO,DEBUG,ALL 
+		# console 表示将信息输出到终端 # dailyLog 表示每天一个日志 可以在下方修改成每天/每星期等 # rollLog 表示每个文件限制大小 
+		可保留N个文件 # html 输出到html文件 # debuggerLog 输出debuggerLog级及以上的日志 # warnLog 输出warn级别及以上的日志 
+		# errorLog 输出error及其以上的日志) -->
+	
+	<!-- 可以将 DatePattern 设置成 每月 yyyy-MM 每周 yyyy-ww 每天 yyyy-MM-dd 每天两次 yyyy-MM-dd-a 
+		每小时 yyyy-MM-dd-HH 每分钟 yyyy-MM-dd-HH-mm -->
+	<appender class="org.apache.log4j.DailyRollingFileAppender"
+		name="dailyLog">
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<param name="File" value="log/dailyLog.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+	
+	<appender class="org.apache.log4j.DailyRollingFileAppender"
+		name="dailyLog-debugger">
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<param name="File" value="log/debuggerLog.log" />
+		<param name="Threshold" value="DEBUGGER" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.DailyRollingFileAppender"
+		name="dailyLog-warnLog">
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<param name="File" value="log/warnLog.log" />
+		<param name="Threshold" value="WARN" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.DailyRollingFileAppender"
+		name="dailyLog-errorLog">
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<param name="File" value="log/errorLog.log" />
+		<param name="Threshold" value="ERROR" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+
+	<appender class="org.apache.log4j.RollingFileAppender" name="html">
+		<param value="false" name="Append" />
+		<param value="logs/htmlLog.html" name="File" />
+		<param value="100KB" name="MaxFileSize" />
+		<layout class="org.apache.log4j.HTMLLayout" />
+	</appender>
+
+	
+
+	<!-- 上面的示例是使用RollingFileAppender的写法，将会在logDir所指定的目录下生成auto.log文件，当文件大小超过50MB时，将原来的文件名改为auto.log.1，再使用auto.log接收新的日志记录。此处保留10个备份文件。 -->
+	<appender class="org.apache.log4j.RollingFileAppender" name="rollLog">
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="File" value="log/rollLog.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+
+	<appender class="org.apache.log4j.RollingFileAppender" name="rollLog-warn">
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="File" value="log/rollLog-warn.log" />
+		<param name="Threshold" value="WARN" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.RollingFileAppender" name="rollLog-error">
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="File" value="log/rollLog-error.log" />
+		<param name="Threshold" value="error" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+	<appender class="org.apache.log4j.ConsoleAppender" name="console">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %C{1}.%M %L %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="log" additivity="false">
+		<level value="info" />
+		<appender-ref ref="console" />
+		<appender-ref ref = "rollLog" />
+		<appender-ref ref = "rollLog-warn" />
+		<appender-ref ref = "rollLog-error" />
+	</logger>
+
+	<!-- 定义自己的包 则可以把自己包下的日志单独放在一个文件里 -->
+	<logger name="xxxx.xxx.xx" additivity="false">
+		<level value="info" />
+		<appender-ref ref="console" />
+		<appender-ref ref="rollLog" />
+		<appender-ref ref="rollLog-warn" />
+		<appender-ref ref="rollLog-error" />
+	</logger>
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="console" />
+		<appender-ref ref="rollLog" />
+		<appender-ref ref="rollLog-warn" />
+		<appender-ref ref="rollLog-error" />
+	</root>
+</log4j:configuration>

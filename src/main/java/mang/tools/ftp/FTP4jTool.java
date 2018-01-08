@@ -48,7 +48,7 @@ public class FTP4jTool implements FTPTool {
 			String currentDirectory=client.currentDirectory();
 			log.info("current directory:{}",currentDirectory);
 			// 打印地址信息
-			log.info("ftp登录成功 {}", client);
+			log.info("ftp login successfully {}", client);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,7 +97,7 @@ public class FTP4jTool implements FTPTool {
 				}
 			}
 		} catch (Exception e) {
-			log.error("获取{}下的文件失败", fileSpec, e);
+			log.error("get {} file failure", fileSpec, e);
 		}
 
 		return resultList;
@@ -187,7 +187,7 @@ public class FTP4jTool implements FTPTool {
 			}
 			client.download(remoteFileName, localTargetFile);
 		} catch (Exception e) {
-			log.error("下载文件异常 ", e);
+			log.error("download file error", e);
 		}
 
 	}
@@ -224,7 +224,7 @@ public class FTP4jTool implements FTPTool {
 			}
 
 		} catch (Exception e) {
-			log.error("下载文件异常", e);
+			log.error("download file error", e);
 		}
 	}
 	

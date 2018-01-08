@@ -17,7 +17,7 @@ public class FTPDownloadSkeleton {
 	private static final Logger log = LoggerFactory.getLogger(FTPDownloadSkeleton.class);
 	
 	//TODO 这里不能自动注入了 应该用配置文件注入
-	@Autowired
+//	@Autowired
 	private FTPDownloadProcessor downloadProcessor;
 	
 	private List<DownloadAfter> downloadAfterList = new ArrayList<DownloadAfter>();

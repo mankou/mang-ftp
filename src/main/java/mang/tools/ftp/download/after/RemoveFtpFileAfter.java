@@ -24,9 +24,10 @@ public class RemoveFtpFileAfter implements DownloadAfter {
 	@Override
 	public void after(List<FtpDownloadInfo> downloadInfoList, Map<String, Object> paraMap) {
 		if (isRemoveFTPFile) {
+			log.info("remove ftp file ...");
 			removeFile(downloadInfoList, paraMap);
 		} else {
-			log.info("远程不删除文件");
+			log.info("don not remove ftp file");
 		}
 	}
 
@@ -36,7 +37,7 @@ public class RemoveFtpFileAfter implements DownloadAfter {
 			for (FtpDownloadInfo downloadInfo : downloadInfoList) {
 				String remotePath = downloadInfo.getRemotePath();
 				String removePath = getRemovePath(remotePath, contextMap);
-				log.info("移除文件{} 到 {}", new Object[] { remotePath, removePath });
+				log.info("remove from {} to {}", new Object[] { remotePath, removePath });
 				ftptool.rename(remotePath, removePath);
 			}
 		}

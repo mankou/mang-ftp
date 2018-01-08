@@ -45,7 +45,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 	@Override
 	public void init() {
 		this.proSn = this.generateProSn();
-		log.info("运行流水号:" + proSn);
+		log.info("proSn:" + proSn);
 		log.info(this.getFtpConfig().toString());
 		contextMap = new HashMap<String, Object>();
 
@@ -74,7 +74,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 		Boolean passive = this.getFtpConfig().getPassive();
 		String filter = this.getFtpConfig().getFilter();
 
-		log.info("下载xml文件开始,FTP路径:{}", remotePath + "/" + filter);
+		log.info("download file start,FTP path:{}", remotePath + "/" + filter);
 		if (isLogin) {
 			boolean ispassive = ftptool.isPassive();
 			log.info("pass mode:" + ispassive);
@@ -103,7 +103,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 
 		}
 
-		log.info("下载xml文件结束,总计下载{}个文件", receiveFileList.size());
+		log.info("download file end,total download {} files", receiveFileList.size());
 		return receiveFileList;
 	}
 	
