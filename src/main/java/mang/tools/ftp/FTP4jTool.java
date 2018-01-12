@@ -1,6 +1,7 @@
 package mang.tools.ftp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ public class FTP4jTool implements FTPTool {
 	 * 登录
 	 */
 	public boolean login() {
+		boolean flag=false;
 		if (client == null) {
 			client = new FTPClient();
 		}
@@ -51,15 +53,15 @@ public class FTP4jTool implements FTPTool {
 			}
 			// 打印地址信息
 			log.info("ftp login successfully {}", client);
-			
-			String currentDirectory=client.currentDirectory();
-			log.info("current directory:{}",currentDirectory);
-			return true;
+
+			String currentDirectory = client.currentDirectory();
+			log.info("current directory:{}", currentDirectory);
+			flag=true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("login error", e);
 		}
 
-		return false;
+		return flag;
 	}
 
 	/**
@@ -70,10 +72,18 @@ public class FTP4jTool implements FTPTool {
 			try {
 				client.disconnect(true);
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("logout error", e);
+
+				try {
+					log.error("attempt disconnect do not performing the QUIT procedure");
+					client.disconnect(false);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
 			}
 		}
-		log.info("logout successfully");
+		log.info("logout complete");
 	}
 
 	@Override
@@ -93,11 +103,12 @@ public class FTP4jTool implements FTPTool {
 			// FTPFile[] list = client.list("*.txt");
 			// 显示文件或文件夹的修改时间 你不能获得 . 或 .. 的修改日期，否则Permission denied
 			for (FTPFile f : list) {
-				//2017-12-02发现有不同的FTP服务器上  如果 out/*.xml 则有的取出来是 out/a.xml 有的是a.xml 我希望文件名是a.xml 所以这里处理下
-				 File file=new File(f.getName());
-				 String fileName=file.getName();
-				 System.out.println("========================="+fileName);
-				if (!".".equals(fileName)&&!"..".equals(fileName)) {
+				// 2017-12-02发现有不同的FTP服务器上 如果 out/*.xml 则有的取出来是 out/a.xml
+				// 有的是a.xml 我希望文件名是a.xml 所以这里处理下
+				File file = new File(f.getName());
+				String fileName = file.getName();
+				System.out.println("=========================" + fileName);
+				if (!".".equals(fileName) && !"..".equals(fileName)) {
 					resultList.add(fileName);
 				}
 			}
@@ -107,49 +118,48 @@ public class FTP4jTool implements FTPTool {
 
 		return resultList;
 	}
-	
-	
+
 	/**
 	 * 获取某一目录下的文件名
-	 * */
-	public List<String> listPathFileName(String dirPath,String filter){
-		List<String> result=new ArrayList<String>();
-		String pwd=null;
+	 */
+	public List<String> listPathFileName(String dirPath, String filter) {
+		List<String> result = new ArrayList<String>();
+		String pwd = null;
 		try {
-			pwd=client.currentDirectory();
+			pwd = client.currentDirectory();
 			client.changeDirectory(dirPath);
-			
+
 			FTPFile[] files;
-			if(filter==null||"".equals(filter)){
-				files=client.list();	
-			}else{
-				files=client.list(filter);				
+			if (filter == null || "".equals(filter)) {
+				files = client.list();
+			} else {
+				files = client.list(filter);
 			}
-			
-			for(FTPFile file:files){
-				String fileName=file.getName();
+
+			for (FTPFile file : files) {
+				String fileName = file.getName();
 				result.add(fileName);
 			}
 		} catch (Exception e) {
-			
-		}finally {
-			if(pwd!=null){
-				try{
-					client.changeDirectory(pwd);					
-				}catch(Exception e){
-					
+
+		} finally {
+			if (pwd != null) {
+				try {
+					client.changeDirectory(pwd);
+				} catch (Exception e) {
+
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Object list(String fileSpec) {
-		List<FTPFile> resultList=new ArrayList<FTPFile>();
+		List<FTPFile> resultList = new ArrayList<FTPFile>();
 		try {
 			FTPFile[] list = client.list(fileSpec);
-			for(FTPFile f:list){
+			for (FTPFile f : list) {
 				if (!f.getName().equals(".") && !f.getName().equals("..")) {
 					resultList.add(f);
 				}
@@ -157,10 +167,9 @@ public class FTP4jTool implements FTPTool {
 			return list;
 		} catch (Exception e) {
 			log.error("获取{}下的文件失败", fileSpec, e);
-		} 
+		}
 		return resultList.toArray();
 	}
-	
 
 	@Override
 	public void downloadFile(String remoteFileName, String localFilePath) {
@@ -232,35 +241,36 @@ public class FTP4jTool implements FTPTool {
 			log.error("download file error", e);
 		}
 	}
-	
+
 	@Override
-	public void downloadRecursive(String remoteDirPath, String fileSpec, String localDirpath,DownloadListener downListener) {
-		FTPFile [] fileArray=(FTPFile[]) this.list(remoteDirPath);
-		for(FTPFile ftpFile:fileArray){
-			String fileName=ftpFile.getName();
-			String remoteFileName=remoteDirPath+"/"+fileName;
-			
-			if(ftpFile.getType()==FTPFile.TYPE_DIRECTORY){
-				downloadRecursive(remoteFileName, fileSpec, localDirpath,downListener);
-			}else if(ftpFile.getType()==FTPFile.TYPE_FILE){
-				if(fileSpec==null||"".equals(fileSpec)||fileName.indexOf(fileSpec)>-1){
-					Map<String,Object> listenerPara =new HashMap<String,Object>();
+	public void downloadRecursive(String remoteDirPath, String fileSpec, String localDirpath,
+			DownloadListener downListener) {
+		FTPFile[] fileArray = (FTPFile[]) this.list(remoteDirPath);
+		for (FTPFile ftpFile : fileArray) {
+			String fileName = ftpFile.getName();
+			String remoteFileName = remoteDirPath + "/" + fileName;
+
+			if (ftpFile.getType() == FTPFile.TYPE_DIRECTORY) {
+				downloadRecursive(remoteFileName, fileSpec, localDirpath, downListener);
+			} else if (ftpFile.getType() == FTPFile.TYPE_FILE) {
+				if (fileSpec == null || "".equals(fileSpec) || fileName.indexOf(fileSpec) > -1) {
+					Map<String, Object> listenerPara = new HashMap<String, Object>();
 					listenerPara.put("remoteFileName", remoteDirPath);
 					listenerPara.put("localDirpath", localDirpath);
-					
-					if(downListener!=null){
+
+					if (downListener != null) {
 						downListener.beforeDownload(listenerPara);
 					}
-					
+
 					this.downloadFile(remoteFileName, localDirpath);
-					
-					if(downListener!=null){
+
+					if (downListener != null) {
 						downListener.afterDownload(listenerPara);
 					}
 				}
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -337,7 +347,7 @@ public class FTP4jTool implements FTPTool {
 	}
 
 	@Override
-	public void deleteDirectory(String directoryName,FTPDeleteListener deleteListener) {
+	public void deleteDirectory(String directoryName, FTPDeleteListener deleteListener) {
 		/**
 		 * 因client.deleteDirectory 只能删除空目录 所以需要先删除目录下的文件
 		 */
@@ -347,35 +357,34 @@ public class FTP4jTool implements FTPTool {
 				String fileName = ftpFile.getName();
 				String deletePath = directoryName + "/" + fileName;
 				try {
-					//递归删除子目录
+					// 递归删除子目录
 					if (ftpFile.getType() == FTPFile.TYPE_DIRECTORY) {
-						deleteDirectory(deletePath,deleteListener);
+						deleteDirectory(deletePath, deleteListener);
 					} else {
 						client.deleteFile(deletePath);
-						if(deleteListener!=null){
+						if (deleteListener != null) {
 							deleteListener.afterDeleteFile(deletePath);
 						}
 					}
 				} catch (Exception e) {
-					log.error("删除文件出错{}",deletePath,e);
+					log.error("删除文件出错{}", deletePath, e);
 				}
 			}
 			client.deleteDirectory(directoryName);
 		} catch (Exception e) {
-			log.error("删除目录出错{}",directoryName,e);
+			log.error("删除目录出错{}", directoryName, e);
 		}
 
 	}
-	
-	
+
 	@Override
 	public void deleteFile(String fileName) {
 		try {
 			client.deleteFile(fileName);
 		} catch (Exception e) {
-			log.error("删除文件出错{}",fileName,e);
+			log.error("删除文件出错{}", fileName, e);
 		}
-		
+
 	}
 
 	private boolean isLogin() {

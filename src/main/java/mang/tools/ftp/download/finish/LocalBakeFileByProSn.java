@@ -28,6 +28,7 @@ public class LocalBakeFileByProSn implements DownloadFinish {
 	public void finish(List<FtpDownloadInfo> downloadInfoList, Map<String, Object> contextMap) {
 		CopyFile copyFile=new SimpleCopy();
 		FTPConfig ftpConfig=(FTPConfig) contextMap.get("ftpConfig");
+		//TODO 这里有可能因为FTP下载出错,而导致这里取出的ftpconfig为空 20180112发现
 		String source=ftpConfig.getLocalPath();
 		String proSn=(String) contextMap.get("proSn");
 		String realDest=destDir+"/"+proSn;

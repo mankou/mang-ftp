@@ -13,7 +13,7 @@ public interface FTPDownloadProcessor {
 	/**
 	 * 登录
 	 * */
-	public void login();
+	public boolean login();
 	
 	
 	/**

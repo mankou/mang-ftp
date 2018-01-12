@@ -25,17 +25,22 @@ public class FTPDownloadSkeleton {
 	
 	public void run() {
 		downloadProcessor.init();
-		downloadProcessor.login();
-		//XXX 另关于 FTPConfig 你最好能写活了
-		//XXX 下载这块这样返回好么? 我也不知道 如果返回的Map则比较复杂
-		List<FtpDownloadInfo> downloadInfoList = downloadProcessor.download();
-		Map<String,Object> contextMap=downloadProcessor.getContextMap();
+		boolean isLogIn=downloadProcessor.login();
 		
-		this.after(downloadInfoList, contextMap);
-		
-		downloadProcessor.logout();
-		
-		this.finish(downloadInfoList, contextMap);	
+		if(isLogIn){
+			//XXX 另关于 FTPConfig 你最好能写活了
+			//XXX 下载这块这样返回好么? 我也不知道 如果返回的Map则比较复杂
+			List<FtpDownloadInfo> downloadInfoList = downloadProcessor.download();
+			Map<String,Object> contextMap=downloadProcessor.getContextMap();
+			
+			this.after(downloadInfoList, contextMap);
+			
+			downloadProcessor.logout();
+			
+			this.finish(downloadInfoList, contextMap);				
+		}else{
+			log.error("login error,do nothing");
+		}
 	}
 	
 	

@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import it.sauronsoftware.ftp4j.FTPClient;
 import mang.tools.ftp.FTP4jTool;
 import mang.tools.ftp.FTPConfig;
 import mang.tools.ftp.FTPTool;
@@ -55,7 +57,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 	}
 	
 	@Override
-	public void login() {
+	public boolean login() {
 		String host = this.getFtpConfig().getHost();
 		String userName = this.getFtpConfig().getUserName();
 		String password = this.getFtpConfig().getPassword();
@@ -63,6 +65,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 			ftptool = new FTP4jTool(host, userName, password);
 		}
 		isLogin = ftptool.login();
+		return isLogin;
 	}
 
 	@Override
@@ -77,15 +80,21 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 		log.info("download file start,FTP path:{}", remotePath + "/" + filter);
 		if (isLogin) {
 			boolean ispassive = ftptool.isPassive();
-			log.info("pass mode:" + ispassive);
+			FTPClient client=(FTPClient) ftptool.getClient();
+			Long autoNoopTimeout=client.getAutoNoopTimeout();
+			log.info("pass mode:{}, autoNoopTimeout:{}",new Object[]{ispassive,autoNoopTimeout});
+			
 			List<String> fileList = ftptool.listPathFileName(remotePath, filter);
+			int fileCount=fileList.size();
+			log.info("get {} files",new Object[]{fileCount});
 
 			contextMap.put("ftptool", ftptool);
 			contextMap.put("proSn", proSn);
 			contextMap.put("ftpConfig", ftpConfig);
 
 			
-			for (String fileName : fileList) {
+			for (int i=0;i<fileList.size();i++) {
+				String fileName=fileList.get(i);
 				String ftpFilePath = remotePath + "/" + fileName;
 				Map<String, Object> listenerPara = new HashMap<String, Object>();
 				listenerPara.putAll(contextMap);
@@ -96,7 +105,7 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 				beforeDownloadListener(listenerPara);
 
 				ftptool.downloadFile(ftpFilePath, localPath);
-				log.info("download {} ok", ftpFilePath);
+				log.info("download file{} {} ok", new Object[]{i+1,ftpFilePath});
 
 				FtpDownloadInfo downloadInfo = new FtpDownloadInfo();
 				downloadInfo.setRemotePath(ftpFilePath);

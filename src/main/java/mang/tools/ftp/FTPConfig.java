@@ -178,7 +178,7 @@ public class FTPConfig {
 	
 	@Override
 	public String toString() {
-		return "FTPConfig [host=" + host + ", port=" + port + ", userName=" + userName + ", password=" + password
+		return "FTPConfig [host=" + host + ", port=" + port + ", userName=" + userName
 				+ ", charset=" + charset + ", remotePath=" + remotePath + ", isRemoveFTPFile=" + isRemoveFTPFile
 				+ ", remoteRemovePath=" + remoteRemovePath + ", localPath=" + localPath + ", localRemovePath="
 				+ localRemovePath + ", ftpDeleteNdays=" + ftpDeleteNdays + ", passive=" + passive + ", filter=" + filter
