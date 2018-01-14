@@ -200,7 +200,7 @@ public class FTP4jTool implements FTPTool {
 			}
 			client.download(remoteFileName, localTargetFile);
 		} catch (Exception e) {
-			log.error("download file error", e);
+			log.error("download file error remoteFile:{}, localFile:{}", new Object[]{remoteFileName,localFilePath},e);
 		}
 
 	}
