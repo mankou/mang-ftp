@@ -81,8 +81,10 @@ public class SimpleFTPDownloadProcessor implements FTPDownloadProcessor {
 		if (isLogin) {
 			boolean ispassive = ftptool.isPassive();
 			FTPClient client=(FTPClient) ftptool.getClient();
-			Long autoNoopTimeout=client.getAutoNoopTimeout();
-			log.info("pass mode:{}, autoNoopTimeout:{}",new Object[]{ispassive,autoNoopTimeout});
+//			Long autoNoopTimeout=client.getAutoNoopTimeout();
+//			log.info("pass mode:{}, autoNoopTimeout:{}",new Object[]{ispassive,autoNoopTimeout});
+			
+			log.info("pass mode:{}, autoNoopTimeout:{}",new Object[]{ispassive});
 			
 			List<String> fileList = ftptool.listPathFileName(remotePath, filter);
 			int fileCount=fileList.size();

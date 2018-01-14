@@ -1,7 +1,6 @@
 package mang.tools.ftp;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +77,7 @@ public class FTP4jTool implements FTPTool {
 					log.error("attempt disconnect do not performing the QUIT procedure");
 					client.disconnect(false);
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					log.error("logout do not performing the QUIT procedure error", e1);
 				}
 
 			}
