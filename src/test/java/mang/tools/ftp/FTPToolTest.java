@@ -1,6 +1,8 @@
 package mang.tools.ftp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.After;
@@ -8,8 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
+import it.sauronsoftware.ftp4j.FTPDataTransferException;
+import it.sauronsoftware.ftp4j.FTPException;
 import it.sauronsoftware.ftp4j.FTPFile;
+import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
 
 
 public class FTPToolTest {
@@ -100,6 +107,21 @@ public class FTPToolTest {
 	public void testExistDirectory(){ //OK
 		boolean isExist=ftptool.existDirectory("test/test");
 		System.out.println("目录是否存在:"+isExist);
+	}
+	
+	
+	@Test
+	public void testTransferListener(){
+		//测试 transferListener
+		FTPClient client=(FTPClient) ftptool.getClient();
+		String remoteFileName="testFTP/info/test.xml";
+		String localFile="c:/test/test.xml";
+		try {
+			client.download(remoteFileName, new File(localFile), new SimpleFTPDataTransferListener());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	
