@@ -171,7 +171,7 @@ public class FTP4jTool implements FTPTool {
 	}
 
 	@Override
-	public void downloadFile(String remoteFileName, String localFilePath) {
+	public boolean downloadFile(String remoteFileName, String localFilePath) {
 
 		// TODO 处理windows路径问题
 		String fileName = remoteFileName.substring(remoteFileName.lastIndexOf("/") + 1);
@@ -199,8 +199,11 @@ public class FTP4jTool implements FTPTool {
 
 			}
 			client.download(remoteFileName, localTargetFile);
+			return true;
 		} catch (Exception e) {
-			log.error("download file error remoteFile:{}, localFile:{}", new Object[]{remoteFileName,localFilePath},e);
+			String errMsg="download file error remoteFile:"+remoteFileName+", localFile:"+localFilePath;
+			log.error(errMsg,e);
+			return false;
 		}
 
 	}

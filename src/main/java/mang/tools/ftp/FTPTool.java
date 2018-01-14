@@ -55,8 +55,9 @@ public interface FTPTool {
 	 * 下载文件
 	 * @param remoteFileName 远程文件路径
 	 * @param localFilePath 本地文件路径 如果以/结尾 则认为是目录 则本地文件名与远程文件名一致 如果不是/结尾 则认为是文件 则本地文件名以该参数为准
+	 * @return boolean 
 	 * */
-	public void downloadFile(String remoteFileName,String localFilePath);
+	public boolean downloadFile(String remoteFileName,String localFilePath);
 	
 	/**
 	 * 下载目录下的文件
